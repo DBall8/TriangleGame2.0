@@ -1,7 +1,7 @@
 package Client;
 import MessageEvent.MessageEvent;
 import MessageEvent.MessageHandler;
-import GameManager.FrameEvent.FrameEvent;
+import GameManager.FrameEvent.IFrameEvent;
 import GameManager.FrameEvent.FrameEventHandler;
 import GameManager.GameManager;
 import Global.Settings;
@@ -24,7 +24,7 @@ public class Launcher extends Application {
 
         game = new GameManager(new FrameEventHandler() {
             @Override
-            public void handle(FrameEvent fe) {
+            public void handle(IFrameEvent fe) {
                 protocol.handleFrameUpdate(fe);
             }
         });
@@ -49,8 +49,7 @@ public class Launcher extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        game.start(scene);
-
+        game.start(scene, false);
 
     }
 

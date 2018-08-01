@@ -1,6 +1,7 @@
 package Server;
 
-import GameManager.FrameEvent.FrameEvent;
+import GameManager.FrameEvent.ClientFrameEvent;
+import GameManager.FrameEvent.IFrameEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
@@ -25,8 +26,9 @@ public class ServerProtocol {
         }
     }
 
-    public void handleFrameUpdate(FrameEvent event){
+    public void handleFrameUpdate(IFrameEvent event){
         if(!ready) return;
+        server.broadcast(event.toJSON().toString());
     }
 
     public void handleMessage(MessageEvent event){
@@ -34,15 +36,22 @@ public class ServerProtocol {
 
         //System.out.println(event.getMessage());
 
-        JSONObject json = new JSONObject(event.getMessage());
-        FrameEvent frame = new FrameEvent(json);
+        JSONObject json = event.getMessage();
 
-        if(game.getEntity(frame.getID()) == null){
+        if(json.has("disconnect")){
+            // Disconenct this ID
+            game.removePlayer(json.getString("ID"));
+            return;
+        }
+
+        ClientFrameEvent frame = new ClientFrameEvent(json);
+
+        if(game.getPlayer(frame.getID()) == null){
             Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY());
             game.addPlayer(p);
         }
         else{
-            game.updateEntity(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
+            game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
         }
     }
 }

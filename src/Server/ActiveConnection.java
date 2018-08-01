@@ -1,7 +1,7 @@
 package Server;
 
 import MessageEvent.MessageEvent;
-import MessageEvent.MessageHandler;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,16 +12,17 @@ import java.net.Socket;
 public class ActiveConnection {
 
     private Socket socket;
+    private String clientID;
 
     private PrintWriter out;
     private BufferedReader in;
 
     private Thread listenerThread;
-    private MessageHandler messageHandler;
+    private Server server;
 
-    public ActiveConnection(Socket socket, MessageHandler messageHandler){
+    public ActiveConnection(Socket socket, Server server){
         this.socket = socket;
-        this.messageHandler = messageHandler;
+        this.server = server;
 
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -36,7 +37,7 @@ public class ActiveConnection {
         }
     }
 
-    private void send(String msg){
+    protected void send(String msg){
         if(out == null){
             System.err.println("Could not send message. No open write stream.");
             return;
@@ -51,7 +52,11 @@ public class ActiveConnection {
                 String msg;
                 try {
                     while ((msg = in.readLine()) != null) {
-                        messageHandler.handle(new MessageEvent(msg));
+                        MessageEvent event = new MessageEvent(msg);
+                        if(clientID == null){
+                            clientID = event.getID();
+                        }
+                        server.messageHandler.handle(event);
                     }
                 }
                 catch(IOException e){
@@ -79,7 +84,19 @@ public class ActiveConnection {
             e.printStackTrace();
         }
 
+        // remove self from server's list off active connections
+        server.removeConnection(this);
+        // tell the protocol that this client disconnected.
+        sendDisconnect();
+
         System.out.println("Client connection closed.");
         // Remove connection from server's connection list
+    }
+
+    private void sendDisconnect(){
+        JSONObject json = new JSONObject();
+        json.put("ID", clientID);
+        json.put("disconnect", true);
+        server.messageHandler.handle(new MessageEvent(json.toString()));
     }
 }

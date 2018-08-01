@@ -8,13 +8,21 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class for creating a server that listens for connecting game clients
+ */
 public class Server {
 
-    private ServerSocket server;
-    MessageHandler messageHandler;
+    private ServerSocket server; // the server socket
+    MessageHandler messageHandler; // the object to handle all messages received
 
-    private List<ActiveConnection> connections;
+    private List<ActiveConnection> connections; // a list of all connected clients
 
+    /**
+     * Constructor
+     * @param port the port for the server to listen on
+     * @param messageHandler the object to handle all received messages
+     */
     public Server(int port, MessageHandler messageHandler){
 
         this.messageHandler = messageHandler;
@@ -30,6 +38,9 @@ public class Server {
         }
     }
 
+    /**
+     * Starts the server running
+     */
     public void start(){
 
         Thread t = new Thread(new Runnable() {
@@ -37,8 +48,10 @@ public class Server {
             public void run() {
                 System.out.println("Listening on " + server.getInetAddress());
 
+                // Continuously listens for new clients
                 while(true){
                     try {
+                        // Once a new client is accepted, create a new connection and keep listening
                         Socket client = server.accept();
                         addConnection(client);
 
@@ -49,6 +62,7 @@ public class Server {
                     }
                 }
 
+                // Once closed, close all connections.
                 try {
                     for(ActiveConnection c: connections){
                         c.close();
@@ -65,16 +79,28 @@ public class Server {
 
     }
 
+    /**
+     * Sends a message to all connected clients
+     * @param msg the message to send
+     */
     public synchronized void broadcast(String msg){
         for(ActiveConnection conn: connections){
             conn.send(msg);
         }
     }
 
-
+    /**
+     * Adds a new client connection to the list
+     * @param s the socket to use in creating the connection
+     */
     private synchronized void addConnection(Socket s){
         connections.add(new ActiveConnection(s, this));
     }
+
+    /**
+     * Removes a client connection from the list
+     * @param connection the connection to remove
+     */
     synchronized void removeConnection(ActiveConnection connection){
         connections.remove(connection);
     }

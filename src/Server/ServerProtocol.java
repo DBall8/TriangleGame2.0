@@ -7,17 +7,26 @@ import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
 import org.json.JSONObject;
 
+/**
+ * A class for handling all the interactions between the server side game simulation and the server
+ */
 public class ServerProtocol {
 
-    private Server server;
-    private GameManager game;
+    private Server server; // the game server
+    private GameManager game; // the server game simulation
 
-    private boolean ready = false;
+    private boolean ready = false; // true when both a server and game have been created
 
+    /**
+     * Sets up the protocol and allows it to start
+     * @param server the server
+     * @param game the game simulation
+     */
     public void prepare(Server server, GameManager game) {
         this.server = server;
         this.game = game;
 
+        // make sure neither are null
         if(server != null && game != null){
             ready = true;
         }
@@ -26,30 +35,42 @@ public class ServerProtocol {
         }
     }
 
+    /**
+     * Handles a new frame of the server simulation
+     * @param event the server frame event containing the states of all players
+     */
     public void handleFrameUpdate(IFrameEvent event){
-        if(!ready) return;
+        if(!ready) return; // make sure protocol is ready
+
+        // send the server's frame to all clients
         server.broadcast(event.toJSON().toString());
     }
 
+    /**
+     * Handles a message received from a client
+     * @param event the message event received
+     */
     public void handleMessage(MessageEvent event){
-        if(!ready) return;
+        if(!ready) return; // make sure protocol is ready
 
-        //System.out.println(event.getMessage());
-
+        // get the JSON object from the message
         JSONObject json = event.getMessage();
 
+        // If the message is a disconnection message, remove the client's player
         if(json.has("disconnect")){
-            // Disconenct this ID
             game.removePlayer(json.getString("ID"));
             return;
         }
 
+        // Otherwise, this is a client's frame update
         ClientFrameEvent frame = new ClientFrameEvent(json);
 
+        // If the player does not exist yet in this simulation, create the new player
         if(game.getPlayer(frame.getID()) == null){
             Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY());
             game.addPlayer(p);
         }
+        // Otherwise, update the existing player
         else{
             game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
         }

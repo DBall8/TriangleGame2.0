@@ -11,17 +11,23 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Launches the client
+ */
 public class Launcher extends Application {
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Set the window dimensions
         Settings.setWindowSize(800, 800);
 
-        GameManager game;
-        ClientConnection conn;
-        ClientProtocol protocol = new ClientProtocol();
+        // Initialize variables
+        GameManager game; // game simulation
+        ClientConnection conn; // connection to server
+        ClientProtocol protocol = new ClientProtocol(); // Protocol for connection the game to the server
 
+        // Build the game
         game = new GameManager(new FrameEventHandler() {
             @Override
             public void handle(IFrameEvent fe) {
@@ -29,6 +35,7 @@ public class Launcher extends Application {
             }
         });
 
+        // Set up the connection
         try {
             conn = new ClientConnection("127.0.0.1", 8080, new MessageHandler() {
                 @Override
@@ -41,14 +48,17 @@ public class Launcher extends Application {
             return;
         }
 
+        // Set up the protocol
         protocol.prepare(conn, game);
 
+        // Launch visuals
         Scene scene = new Scene(game, 800, 800);
 
         primaryStage.setTitle("Client");
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        // start the game
         game.start(scene, false);
 
     }

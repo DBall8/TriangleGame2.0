@@ -9,17 +9,24 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Class for launching a game server
+ */
 public class Launcher extends Application {
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Set window dimensions
         Settings.setWindowSize(800, 800);
 
-        GameManager game;
-        Server server;
-        ServerProtocol protocol = new ServerProtocol();
+        // Initialize variables
+        GameManager game; // game simulation
+        Server server; // server
+        ServerProtocol protocol = new ServerProtocol(); // protocol controlling the interaction between the game and the
+                                                        // server
 
+        // Set up the game simulation
         game = new GameManager(new FrameEventHandler() {
             @Override
             public void handle(IFrameEvent fe) {
@@ -27,13 +34,7 @@ public class Launcher extends Application {
             }
         });
 
-        Scene scene = new Scene(game, 800, 800);
-        primaryStage.setTitle("Server");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        game.start(scene, true);
-
+        // Set up the server
         server = new Server(8080, new MessageHandler() {
             @Override
             public void handle(MessageEvent event) {
@@ -42,7 +43,19 @@ public class Launcher extends Application {
         });
         server.start();
 
+        // Start the protocol
         protocol.prepare(server, game);
+
+        // Set up the visuals
+        Scene scene = new Scene(game, 800, 800);
+        primaryStage.setTitle("Server");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        // start the game
+        game.start(scene, true);
+
+
     }
 
     public static void main(String[] args) {

@@ -9,17 +9,25 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * A class for handling an active connection to a client on the server side
+ */
 public class ActiveConnection {
 
-    private Socket socket;
-    private String clientID;
+    private Socket socket; // connection to the client
+    private String clientID; // Player ID of the client
 
-    private PrintWriter out;
-    private BufferedReader in;
+    private PrintWriter out; // for writing
+    private BufferedReader in; // for reading
 
-    private Thread listenerThread;
-    private Server server;
+    private Thread listenerThread; // a thread continuously listening for messages from the client
+    private Server server; // the server who created this connection
 
+    /**
+     * Constructor
+     * @param socket the socket conencting to the client
+     * @param server the server that created this connection
+     */
     public ActiveConnection(Socket socket, Server server){
         this.socket = socket;
         this.server = server;
@@ -29,6 +37,7 @@ public class ActiveConnection {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connection with client at " + socket.getInetAddress() + " established.");
 
+            // once streams are set up, start listening
             listen();
 
         } catch(IOException e){
@@ -37,7 +46,12 @@ public class ActiveConnection {
         }
     }
 
+    /**
+     * Sends a message to the client
+     * @param msg the message to send
+     */
     protected void send(String msg){
+        // make sure the stream is ready
         if(out == null){
             System.err.println("Could not send message. No open write stream.");
             return;
@@ -45,6 +59,9 @@ public class ActiveConnection {
         out.println(msg);
     }
 
+    /**
+     * Continuously listens for messages from the client
+     */
     private void listen(){
         listenerThread = new Thread(new Runnable() {
             @Override
@@ -52,10 +69,13 @@ public class ActiveConnection {
                 String msg;
                 try {
                     while ((msg = in.readLine()) != null) {
+                        // Create a message event when a message is received
                         MessageEvent event = new MessageEvent(msg);
+                        // If havent found the ID already, mark it down
                         if(clientID == null){
                             clientID = event.getID();
                         }
+                        // pass the message to the message handler
                         server.messageHandler.handle(event);
                     }
                 }
@@ -72,11 +92,16 @@ public class ActiveConnection {
         listenerThread.start();
     }
 
+    /**
+     * Closes this connection to the client
+     */
     public void close(){
+        // If still listening, stop the listener
         if(listenerThread != null) {
             listenerThread.interrupt();
         }
 
+        // Close the connection
         try {
             socket.close();
         } catch (IOException e) {
@@ -93,7 +118,11 @@ public class ActiveConnection {
         // Remove connection from server's connection list
     }
 
+    /**
+     * Sends a disconnection message to the server game simulation
+     */
     private void sendDisconnect(){
+        // Construct a message that just has this client's player ID and the value "disconnect"
         JSONObject json = new JSONObject();
         json.put("ID", clientID);
         json.put("disconnect", true);

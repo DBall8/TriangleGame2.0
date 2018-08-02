@@ -18,7 +18,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Set window dimensions
-        Settings.setWindowSize(800, 800);
+        //Settings.setWindowSize(800, 800);
 
         // Initialize variables
         GameManager game; // game simulation
@@ -47,7 +47,7 @@ public class Launcher extends Application {
         protocol.prepare(server, game);
 
         // Set up the visuals
-        Scene scene = new Scene(game, 800, 800);
+        Scene scene = new Scene(game, Settings.getWindowWidth(), Settings.getWindowHeight());
         primaryStage.setTitle("Server");
         primaryStage.setScene(scene);
         primaryStage.show();

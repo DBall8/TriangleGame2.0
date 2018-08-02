@@ -2,11 +2,16 @@ package Server;
 
 import GameManager.FrameEvent.ClientFrameEvent;
 import GameManager.FrameEvent.FrameEvent;
+import GameManager.FrameEvent.ServerFrameEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
 import Objects.Entities.Projectile;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class for handling all the interactions between the server side game simulation and the server
@@ -17,6 +22,8 @@ public class ServerProtocol {
     private GameManager game; // the server game simulation
 
     private boolean ready = false; // true when both a server and game have been created
+
+    private List<String> disconnectedIDs = new ArrayList<>();
 
     /**
      * Sets up the protocol and allows it to start
@@ -43,8 +50,13 @@ public class ServerProtocol {
     public void handleFrameUpdate(FrameEvent event){
         if(!ready) return; // make sure protocol is ready
 
+        JSONObject json = event.toJSON();
+        if(disconnectedIDs.size() > 0){
+            addDisconnectsToFrame(json);
+        }
+
         // send the server's frame to all clients
-        server.broadcast(event.toJSON().toString());
+        server.broadcast(json.toString());
     }
 
     /**
@@ -60,6 +72,7 @@ public class ServerProtocol {
         // If the message is a disconnection message, remove the client's player
         if(json.has("disconnect")){
             game.removePlayer(json.getString("ID"));
+            addDisconnectedID(json.getString("ID"));
             return;
         }
 
@@ -85,5 +98,19 @@ public class ServerProtocol {
                 }
             }
         }
+    }
+
+    private synchronized void addDisconnectsToFrame(JSONObject json){
+        JSONArray disconIDs = new JSONArray();
+        for(String id: disconnectedIDs){
+            disconIDs.put(id);
+        }
+
+        json.put("disconnects", disconIDs);
+        disconnectedIDs.clear();
+    }
+
+    private synchronized void addDisconnectedID(String id){
+        disconnectedIDs.add(id);
     }
 }

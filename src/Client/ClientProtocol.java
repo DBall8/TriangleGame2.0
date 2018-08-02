@@ -86,5 +86,9 @@ public class ClientProtocol{
                 }
             }
         }
+
+        for(String id: serverFrame.getDisconnectedIDs()){
+            game.removePlayer(id);
+        }
     }
 }

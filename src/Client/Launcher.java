@@ -1,7 +1,7 @@
 package Client;
 import MessageEvent.MessageEvent;
 import MessageEvent.MessageHandler;
-import GameManager.FrameEvent.IFrameEvent;
+import GameManager.FrameEvent.FrameEvent;
 import GameManager.FrameEvent.FrameEventHandler;
 import GameManager.GameManager;
 import Global.Settings;
@@ -30,7 +30,7 @@ public class Launcher extends Application {
         // Build the game
         game = new GameManager(new FrameEventHandler() {
             @Override
-            public void handle(IFrameEvent fe) {
+            public void handle(FrameEvent fe) {
                 protocol.handleFrameUpdate(fe);
             }
         });

@@ -1,10 +1,11 @@
 package Server;
 
 import GameManager.FrameEvent.ClientFrameEvent;
-import GameManager.FrameEvent.IFrameEvent;
+import GameManager.FrameEvent.FrameEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
+import Objects.Entities.Projectile;
 import org.json.JSONObject;
 
 /**
@@ -39,7 +40,7 @@ public class ServerProtocol {
      * Handles a new frame of the server simulation
      * @param event the server frame event containing the states of all players
      */
-    public void handleFrameUpdate(IFrameEvent event){
+    public void handleFrameUpdate(FrameEvent event){
         if(!ready) return; // make sure protocol is ready
 
         // send the server's frame to all clients
@@ -73,6 +74,16 @@ public class ServerProtocol {
         // Otherwise, update the existing player
         else{
             game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
+        }
+
+        // Fire all new projectiles
+        if(frame.getNewProjectiles() != null) {
+            for (Projectile p : frame.getNewProjectiles()) {
+                Projectile existingP = game.getProjectile(p.getID());
+                if(existingP == null || !existingP.getID().equals(p.getID())) {
+                    game.addProjectile(p);
+                }
+            }
         }
     }
 }

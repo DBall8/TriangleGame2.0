@@ -1,8 +1,7 @@
 package Server;
 
-import GameManager.FrameEvent.ClientFrameEvent;
-import GameManager.FrameEvent.FrameEvent;
-import GameManager.FrameEvent.ServerFrameEvent;
+import Events.FrameEvent.ClientFrameEvent;
+import Events.FrameEvent.FrameEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;

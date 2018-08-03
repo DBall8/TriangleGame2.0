@@ -1,18 +1,21 @@
 package Client;
 
-import GameManager.FrameEvent.ClientFrameEvent;
-import GameManager.FrameEvent.ServerFrameEvent;
+import Events.FrameEvent.ClientFrameEvent;
+import Events.FrameEvent.ServerFrameEvent;
 import MessageEvent.MessageEvent;
-import GameManager.FrameEvent.FrameEvent;
+import Events.FrameEvent.FrameEvent;
 import GameManager.GameManager;
 import Objects.Entities.Player;
 import Objects.Entities.Projectile;
+import Physics.Physics;
 import org.json.JSONObject;
 
 /**
  * Class for handling the interactions between the Game and the messages coming from the server
  */
 public class ClientProtocol{
+
+    private static final int REBOUND_DIST = 50;
 
     private ClientConnection conn; // connection to the server
     private GameManager game; // Local side game simulation
@@ -64,7 +67,15 @@ public class ClientProtocol{
 
             // If the player is this client's player
             if(clientFrame.getID().equals(game.getPlayerID())){
+
+                Player p = game.getPlayer(game.getPlayerID());
                 // Make sure hasnt traveled too far
+                if(Physics.getDistance(p.getX(), p.getY(), clientFrame.getX(), clientFrame.getY()) > REBOUND_DIST){
+                    game.updatePlayer(clientFrame.getID(), clientFrame.getX(), clientFrame.getY(), clientFrame.getXvel(), clientFrame.getYvel(), clientFrame.getAngle(), clientFrame.getHealth());
+                }
+                else{
+
+                }
             }
             // Add new player if doesnt already exist
             else if(game.getPlayer(clientFrame.getID()) == null){
@@ -73,7 +84,7 @@ public class ClientProtocol{
             }
             // update existing player
             else{
-                game.updatePlayer(clientFrame.getID(), clientFrame.getX(), clientFrame.getY(), clientFrame.getXvel(), clientFrame.getYvel(), clientFrame.getAngle());
+                game.updatePlayer(clientFrame.getID(), clientFrame.getX(), clientFrame.getY(), clientFrame.getXvel(), clientFrame.getYvel(), clientFrame.getAngle(), clientFrame.getHealth());
             }
 
             // Fire all new projectiles

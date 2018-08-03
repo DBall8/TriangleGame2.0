@@ -1,8 +1,8 @@
 package Client;
+import Events.EventHandler;
 import MessageEvent.MessageEvent;
 import MessageEvent.MessageHandler;
-import GameManager.FrameEvent.FrameEvent;
-import GameManager.FrameEvent.FrameEventHandler;
+import Events.FrameEvent.FrameEvent;
 import GameManager.GameManager;
 import Global.Settings;
 import javafx.application.Application;
@@ -28,7 +28,7 @@ public class Launcher extends Application {
         ClientProtocol protocol = new ClientProtocol(); // Protocol for connection the game to the server
 
         // Build the game
-        game = new GameManager(new FrameEventHandler() {
+        game = new GameManager(new EventHandler<FrameEvent>() {
             @Override
             public void handle(FrameEvent fe) {
                 protocol.handleFrameUpdate(fe);

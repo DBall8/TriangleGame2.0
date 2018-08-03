@@ -1,6 +1,6 @@
 package Server;
-import GameManager.FrameEvent.FrameEvent;
-import GameManager.FrameEvent.FrameEventHandler;
+import Events.EventHandler;
+import Events.FrameEvent.FrameEvent;
 import GameManager.GameManager;
 import Global.Settings;
 import MessageEvent.MessageEvent;
@@ -20,6 +20,8 @@ public class Launcher extends Application {
         // Set window dimensions
         //Settings.setWindowSize(800, 800);
 
+        Settings.setServer();
+
         // Initialize variables
         GameManager game; // game simulation
         Server server; // server
@@ -27,7 +29,7 @@ public class Launcher extends Application {
                                                         // server
 
         // Set up the game simulation
-        game = new GameManager(new FrameEventHandler() {
+        game = new GameManager(new EventHandler<FrameEvent>() {
             @Override
             public void handle(FrameEvent fe) {
                 protocol.handleFrameUpdate(fe);

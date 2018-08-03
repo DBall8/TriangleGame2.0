@@ -2,6 +2,7 @@ package Server;
 
 import Events.FrameEvent.ClientFrameEvent;
 import Events.FrameEvent.FrameEvent;
+import Events.HitEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
@@ -83,7 +84,7 @@ public class ServerProtocol {
             Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY());
             game.addPlayer(p);
         }
-        // Otherwise, update the existing player
+        // Otherwise, update the existing player, but dont take health updates
         else{
             game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
         }
@@ -94,6 +95,16 @@ public class ServerProtocol {
                 Projectile existingP = game.getProjectile(p.getID());
                 if(existingP == null || !existingP.getID().equals(p.getID())) {
                     game.addProjectile(p);
+                }
+            }
+        }
+
+        // update all damages
+        if(frame.getNewHits() != null){
+            for(HitEvent hit: frame.getNewHits()){
+                Player p = game.getPlayer(hit.getPlayerID());
+                if(p != null){
+                    p.damage(hit.getDamage(), hit.getX(), hit.getY());
                 }
             }
         }

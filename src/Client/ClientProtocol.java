@@ -73,8 +73,8 @@ public class ClientProtocol{
                 if(Physics.getDistance(p.getX(), p.getY(), clientFrame.getX(), clientFrame.getY()) > REBOUND_DIST){
                     game.updatePlayer(clientFrame.getID(), clientFrame.getX(), clientFrame.getY(), clientFrame.getXvel(), clientFrame.getYvel(), clientFrame.getAngle(), clientFrame.getHealth());
                 }
-                else{
-
+                else if(p.getHealth() != clientFrame.getHealth()) {
+                    game.updatePlayer(clientFrame.getID(), clientFrame.getHealth());
                 }
             }
             // Add new player if doesnt already exist

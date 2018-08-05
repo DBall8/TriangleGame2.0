@@ -14,6 +14,8 @@ import javafx.stage.Stage;
  */
 public class Launcher extends Application {
 
+    GameManager game; // game simulation
+    Server server; // server
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -23,8 +25,6 @@ public class Launcher extends Application {
         Settings.setServer();
 
         // Initialize variables
-        GameManager game; // game simulation
-        Server server; // server
         ServerProtocol protocol = new ServerProtocol(); // protocol controlling the interaction between the game and the
                                                         // server
 
@@ -66,6 +66,7 @@ public class Launcher extends Application {
 
     @Override
     public void stop(){
+        server.close();
         System.exit(0);
     }
 }

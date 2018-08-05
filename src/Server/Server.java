@@ -3,8 +3,10 @@ package Server;
 import MessageEvent.MessageHandler;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class Server {
     MessageHandler messageHandler; // the object to handle all messages received
 
     private List<ActiveConnection> connections; // a list of all connected clients
+
+    Thread listener;
 
     /**
      * Constructor
@@ -32,9 +36,10 @@ public class Server {
         try {
             server = new ServerSocket(port);
 
-        } catch (IOException e) {
-            System.out.println("Could open server.");
+        } catch (Exception e) {
+            System.out.println("Couldn't open server.");
             e.printStackTrace();
+            close();
         }
     }
 
@@ -43,10 +48,10 @@ public class Server {
      */
     public void start(){
 
-        Thread t = new Thread(new Runnable() {
+        listener = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Listening on " + server.getInetAddress());
+                System.out.println("Listening on " + server.getInetAddress() + ":" + server.getLocalPort());
 
                 // Continuously listens for new clients
                 while(true){
@@ -62,22 +67,32 @@ public class Server {
                     }
                 }
 
-                // Once closed, close all connections.
-                try {
-                    for(ActiveConnection c: connections){
-                        c.close();
-                    }
-                    server.close();
-                    System.out.println("Server closed.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                close();
             }
         });
-        t.setDaemon(true);
-        t.start();
+        listener.setDaemon(true);
+        listener.start();
 
     }
+
+    public void close(){
+
+        if(listener != null){
+            listener.interrupt();
+        }
+
+        // Once closed, close all connections.
+        try {
+            for(ActiveConnection c: connections){
+                c.close();
+            }
+            server.close();
+            System.out.println("Server closed.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Sends a message to all connected clients

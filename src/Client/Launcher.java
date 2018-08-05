@@ -37,7 +37,7 @@ public class Launcher extends Application {
 
         // Set up the connection
         try {
-            conn = new ClientConnection("127.0.0.1", 8080, new MessageHandler() {
+            conn = new ClientConnection("73.119.132.85", 8080, new MessageHandler() {
                 @Override
                 public void handle(MessageEvent event) {
                     protocol.handleMessage(event);
@@ -45,6 +45,7 @@ public class Launcher extends Application {
             });
         } catch(IOException e){
             System.out.println("Could not establish connection to a server.");
+            e.printStackTrace();
             return;
         }
 

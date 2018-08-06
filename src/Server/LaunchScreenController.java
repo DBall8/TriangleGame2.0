@@ -4,9 +4,11 @@ import Client.GameLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class LaunchScreenController {
@@ -15,6 +17,8 @@ public class LaunchScreenController {
     private TextField portField;
     @FXML
     private Button launchServerButton;
+    @FXML
+    private Label errorText;
 
     @FXML
     private void buttonAction(ActionEvent e){
@@ -23,22 +27,38 @@ public class LaunchScreenController {
             try {
                 port = Integer.parseInt(portField.getText());
             } catch (NumberFormatException err){
-                System.err.println("Not a valid port number.");
+                showError("Not a valid port number.");
                 return;
             }
 
             if(port < 0){
-                System.out.println("Please provide a valid IP and port.");
+                showError("Please provide a valid port, greater than 0.");
             }
             else{
                 Stage stage = (Stage) launchServerButton.getScene().getWindow();
                 try {
                     new ServerLauncher(stage, port);
                 } catch (Exception err){
-                    System.out.println("Could not launch server on port " + port);
+                    showError("Could not launch server on port " + port);
                     err.printStackTrace();
                 }
             }
         }
+    }
+
+    @FXML
+    private void fieldChanged(){
+        hideError();
+    }
+
+    private void hideError(){
+        if(errorText.isVisible()){
+            errorText.setVisible(false);
+        }
+    }
+
+    private void showError(String text){
+        errorText.setText(text);
+        errorText.setVisible(true);
     }
 }

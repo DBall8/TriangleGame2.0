@@ -9,8 +9,6 @@ import MessageEvent.MessageHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class ServerLauncher {
 
     private GameManager game; // game simulation

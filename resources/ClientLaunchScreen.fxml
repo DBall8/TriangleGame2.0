@@ -28,7 +28,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="ipField" text="127.0.0.1">
+                  <TextField fx:id="ipField" onKeyPressed="#fieldChanged" text="127.0.0.1">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -38,7 +38,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="portField" prefHeight="25.0" prefWidth="67.0" text="8080">
+                  <TextField fx:id="portField" onKeyPressed="#fieldChanged" prefHeight="25.0" prefWidth="67.0" text="8080">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -56,6 +56,11 @@
                   <Font size="24.0" />
                </font>
             </Button>
+            <Label fx:id="errorText" alignment="CENTER" text="Error:" textFill="#e10000" visible="false">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </center>

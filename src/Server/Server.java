@@ -27,7 +27,7 @@ public class Server {
      * @param port the port for the server to listen on
      * @param messageHandler the object to handle all received messages
      */
-    public Server(int port, MessageHandler messageHandler){
+    public Server(int port, MessageHandler messageHandler) throws Exception{
 
         this.messageHandler = messageHandler;
 
@@ -37,9 +37,8 @@ public class Server {
             server = new ServerSocket(port);
 
         } catch (Exception e) {
-            System.out.println("Couldn't open server.");
-            e.printStackTrace();
             close();
+            throw e;
         }
     }
 

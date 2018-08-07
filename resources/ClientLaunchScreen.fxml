@@ -61,6 +61,14 @@
                   <Font size="36.0" />
                </font>
             </Label>
+            <Button fx:id="controlsButton" mnemonicParsing="false" onAction="#buttonAction" text="Change Controls">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </center>

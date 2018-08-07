@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LaunchScreenController {
+public class LaunchScreenController extends ScreenController {
 
     @FXML
     private TextField ipField;
@@ -20,6 +20,9 @@ public class LaunchScreenController {
     private Button joinGameButton;
     @FXML
     private Label errorText;
+
+    @FXML
+    private Button controlsButton;
 
     @FXML
     private void buttonAction(ActionEvent e){
@@ -44,6 +47,15 @@ public class LaunchScreenController {
                     showError("Could not connect to server with address " + ip + ":" + port);
                     err.printStackTrace();
                 }
+            }
+        }
+        else if(e.getSource() == controlsButton){
+            try{
+                Stage stage = (Stage) controlsButton.getScene().getWindow();
+                switchScreen(stage, "ControlScreen.fxml");
+            } catch (IOException err){
+                showError("Problem switchingn screens. Somebody messed up real bad good luck to them.");
+                err.printStackTrace();
             }
         }
     }

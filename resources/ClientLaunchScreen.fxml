@@ -56,7 +56,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Label fx:id="errorText" alignment="CENTER" text="Error:" textFill="#e10000" visible="false">
+            <Label fx:id="errorText" alignment="CENTER" contentDisplay="CENTER" style="-fx-wrap-text: true;" text="Error:" textAlignment="CENTER" textFill="#e10000" visible="false">
                <font>
                   <Font size="36.0" />
                </font>

@@ -1,5 +1,6 @@
 package Client.ScreenControllers;
 
+import Client.GameLauncher;
 import GameManager.UserInputHandler.UserInputHandler;
 import Global.Settings;
 import javafx.event.ActionEvent;
@@ -25,6 +26,8 @@ public class ControlScreenController extends ScreenController implements Initial
     @FXML
     private Button lButton;
     @FXML
+    private Button aimButton;
+    @FXML
     private Button sButton;
     @FXML
     private Button bButton;
@@ -45,6 +48,7 @@ public class ControlScreenController extends ScreenController implements Initial
         if(e.getSource() == revButton) binding = UserInputHandler.Binding.DOWN;
         if(e.getSource() == rButton) binding = UserInputHandler.Binding.RIGHT;
         if(e.getSource() == lButton) binding = UserInputHandler.Binding.LEFT;
+        if(e.getSource() == aimButton) binding = UserInputHandler.Binding.AIM;
         if(e.getSource() == sButton) binding = UserInputHandler.Binding.SHOOT;
         if(e.getSource() == bButton) binding = UserInputHandler.Binding.BOOST;
         if(e.getSource() == a1Button) binding = UserInputHandler.Binding.ABILITY1;
@@ -57,13 +61,20 @@ public class ControlScreenController extends ScreenController implements Initial
 
     @FXML
     private void backButtonAction(ActionEvent e){
-        try{
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            switchScreen(stage, "ClientLaunchScreen.fxml");
-        } catch (IOException err){
-            //showError("Problem switchingn screens. Somebody messed up real bad good luck to them.");
-            err.printStackTrace();
+
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        if(GameLauncher.getStatus() == GameLauncher.GAMESTATUS.UNSTARTED){
+            try{
+                switchScreen(stage, "ClientLaunchScreen.fxml");
+            } catch (IOException err){
+                //showError("Problem switchingn screens. Somebody messed up real bad good luck to them.");
+                err.printStackTrace();
+            }
         }
+        else{
+            GameLauncher.show(stage);
+        }
+
     }
 
     private void waitForKeyPress(Button b, UserInputHandler.Binding binding){
@@ -92,6 +103,7 @@ public class ControlScreenController extends ScreenController implements Initial
         revButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.DOWN));
         rButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.LEFT));
         lButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.RIGHT));
+        aimButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.AIM));
         sButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.SHOOT));
         bButton.setText(inputHandler.getBoundKey(UserInputHandler.Binding.BOOST));
         a1Button.setText(inputHandler.getBoundKey(UserInputHandler.Binding.ABILITY1));

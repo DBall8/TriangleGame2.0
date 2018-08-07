@@ -2,12 +2,16 @@ package Server;
 
 import Events.EventHandler;
 import Events.FrameEvent.FrameEvent;
+import Events.GameEndEvent;
 import GameManager.GameManager;
 import Global.Settings;
 import MessageEvent.MessageEvent;
 import MessageEvent.MessageHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ServerLauncher {
 
@@ -25,6 +29,12 @@ public class ServerLauncher {
             @Override
             public void handle(FrameEvent fe) {
                 protocol.handleFrameUpdate(fe);
+            }
+        });
+        game.setGameEndHandler(new EventHandler<GameEndEvent>() {
+            @Override
+            public void handle(GameEndEvent event) {
+                handleGameEnd();
             }
         });
 
@@ -48,5 +58,15 @@ public class ServerLauncher {
 
         // start the game
         game.start(scene, true);
+    }
+
+    public void handleGameEnd(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                game.reset();
+            }
+        }, 3 * 1000);
     }
 }

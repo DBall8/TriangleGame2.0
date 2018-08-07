@@ -79,7 +79,7 @@ public class ClientProtocol{
             }
             // Add new player if doesnt already exist
             else if(game.getPlayer(clientFrame.getID()) == null){
-                Player p = new Player(clientFrame.getID(), (int)clientFrame.getX(), (int)clientFrame.getY());
+                Player p = new Player(clientFrame.getID(), (int)clientFrame.getX(), (int)clientFrame.getY(), clientFrame.getAngle());
                 game.addPlayer(p);
             }
             // update existing player

@@ -81,7 +81,7 @@ public class ServerProtocol {
 
         // If the player does not exist yet in this simulation, create the new player
         if(game.getPlayer(frame.getID()) == null){
-            Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY());
+            Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY(), frame.getAngle());
             game.addPlayer(p);
         }
         // Otherwise, update the existing player, but dont take health updates
@@ -101,6 +101,7 @@ public class ServerProtocol {
 
         // update all damages
         if(frame.getNewHits() != null){
+            System.out.println(frame.getNewHits().length);
             for(HitEvent hit: frame.getNewHits()){
                 Player p = game.getPlayer(hit.getPlayerID());
                 if(p != null){

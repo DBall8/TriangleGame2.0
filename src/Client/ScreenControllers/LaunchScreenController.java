@@ -42,7 +42,8 @@ public class LaunchScreenController extends ScreenController {
             else{
                 Stage stage = (Stage) joinGameButton.getScene().getWindow();
                 try {
-                    new GameLauncher(stage, ip, port);
+                    GameLauncher.set(ip, port);
+                    GameLauncher.show(stage);
                 } catch (IOException err){
                     showError("Could not connect to server with address " + ip + ":" + port);
                     err.printStackTrace();

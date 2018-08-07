@@ -101,7 +101,6 @@ public class ServerProtocol {
 
         // update all damages
         if(frame.getNewHits() != null){
-            System.out.println(frame.getNewHits().length);
             for(HitEvent hit: frame.getNewHits()){
                 Player p = game.getPlayer(hit.getPlayerID());
                 if(p != null){

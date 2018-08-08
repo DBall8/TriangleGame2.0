@@ -7,6 +7,7 @@ import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
 import Objects.Entities.Projectile;
+import Physics.Physics;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,6 +18,8 @@ import java.util.List;
  * A class for handling all the interactions between the server side game simulation and the server
  */
 public class ServerProtocol {
+
+    private static final int REBOUND_DIST = 50;
 
     private Server server; // the game server
     private GameManager game; // the server game simulation
@@ -79,14 +82,23 @@ public class ServerProtocol {
         // Otherwise, this is a client's frame update
         ClientFrameEvent frame = new ClientFrameEvent(json);
 
+        Player player = game.getPlayer(frame.getID());
         // If the player does not exist yet in this simulation, create the new player
-        if(game.getPlayer(frame.getID()) == null){
+        if(player == null){
             Player p = new Player(frame.getID(), (int)frame.getX(), (int)frame.getY(), frame.getAngle());
             game.addPlayer(p);
         }
         // Otherwise, update the existing player, but dont take health updates
         else{
-            game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
+            // If the player has moved too far from where they were last, reject the new position
+            if(Physics.getDistance(player.getX(), player.getY(), frame.getX(), frame.getY()) > REBOUND_DIST){
+                game.updatePlayer(frame.getID(), player.getX(), player.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
+            }
+            // Otherwise, keep the position
+            else{
+                game.updatePlayer(frame.getID(), frame.getX(), frame.getY(), frame.getXvel(), frame.getYvel(), frame.getAngle());
+            }
+
         }
 
         // Fire all new projectiles
@@ -104,7 +116,7 @@ public class ServerProtocol {
             for(HitEvent hit: frame.getNewHits()){
                 Player p = game.getPlayer(hit.getPlayerID());
                 if(p != null){
-                    p.damage(hit.getDamage(), hit.getX(), hit.getY());
+                    p.damage(hit.getDamage());
                 }
             }
         }

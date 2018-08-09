@@ -50,6 +50,9 @@ public class Launcher extends Application {
         if(server != null){
             server.close();
         }
+        else{
+            System.out.println("Server may not have closed properly.");
+        }
         System.exit(0);
     }
 }

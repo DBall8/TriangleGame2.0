@@ -6,7 +6,7 @@ import Events.HitEvent;
 import GameManager.GameManager;
 import MessageEvent.MessageEvent;
 import Objects.Entities.Player;
-import Objects.Entities.Projectile;
+import Objects.Entities.Projectiles.Projectile;
 import Physics.Physics;
 import org.json.JSONArray;
 import org.json.JSONObject;

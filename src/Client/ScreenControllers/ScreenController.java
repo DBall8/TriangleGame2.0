@@ -1,4 +1,4 @@
-package Client.ScreenControllers;
+package client.screenControllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

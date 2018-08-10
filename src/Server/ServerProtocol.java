@@ -1,13 +1,14 @@
-package Server;
+package server;
 
-import Events.FrameEvent.ClientFrameEvent;
-import Events.FrameEvent.FrameEvent;
-import Events.HitEvent;
-import GameManager.GameManager;
-import MessageEvent.MessageEvent;
-import Objects.Entities.Player;
-import Objects.Entities.Projectiles.Projectile;
-import Physics.Physics;
+import animation.Animation;
+import events.frameEvent.ClientFrameEvent;
+import events.frameEvent.FrameEvent;
+import events.HitEvent;
+import gameManager.GameManager;
+import messageEvent.MessageEvent;
+import objects.entities.Player;
+import objects.entities.projectiles.Projectile;
+import physics.Physics;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -54,9 +55,8 @@ public class ServerProtocol {
         if(!ready) return; // make sure protocol is ready
 
         JSONObject json = event.toJSON();
-        if(disconnectedIDs.size() > 0){
-            addDisconnectsToFrame(json);
-        }
+
+        addDisconnectsToFrame(json);
 
         // send the server's frame to all clients
         server.broadcast(json.toString());
@@ -120,9 +120,21 @@ public class ServerProtocol {
                 }
             }
         }
+
+        if(frame.getNewAnimations() != null){
+            for(Animation a: frame.getNewAnimations()){
+                Player p = game.getPlayer(a.getOwnerID());
+                if(p != null){
+                    p.addAnimation(a, true);
+                }
+            }
+        }
     }
 
     private synchronized void addDisconnectsToFrame(JSONObject json){
+
+        if(disconnectedIDs.size() <= 0) return;
+
         JSONArray disconIDs = new JSONArray();
         for(String id: disconnectedIDs){
             disconIDs.put(id);
@@ -135,4 +147,5 @@ public class ServerProtocol {
     private synchronized void addDisconnectedID(String id){
         disconnectedIDs.add(id);
     }
+
 }

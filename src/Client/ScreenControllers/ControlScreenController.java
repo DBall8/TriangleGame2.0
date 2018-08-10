@@ -1,8 +1,8 @@
-package Client.ScreenControllers;
+package client.screenControllers;
 
-import Client.GameLauncher;
-import GameManager.UserInputHandler.UserInputHandler;
-import Global.Settings;
+import client.GameLauncher;
+import gameManager.userInputHandler.UserInputHandler;
+import global.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

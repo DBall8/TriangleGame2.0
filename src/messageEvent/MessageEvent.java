@@ -1,4 +1,4 @@
-package MessageEvent;
+package messageEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;

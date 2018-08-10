@@ -1,10 +1,4 @@
-package Server;
-import Events.EventHandler;
-import Events.FrameEvent.FrameEvent;
-import GameManager.GameManager;
-import Global.Settings;
-import MessageEvent.MessageEvent;
-import MessageEvent.MessageHandler;
+package server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

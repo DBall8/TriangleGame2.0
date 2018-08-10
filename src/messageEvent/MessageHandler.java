@@ -1,4 +1,4 @@
-package MessageEvent;
+package messageEvent;
 
 public abstract class MessageHandler {
 

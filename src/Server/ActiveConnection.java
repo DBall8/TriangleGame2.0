@@ -1,6 +1,6 @@
-package Server;
+package server;
 
-import MessageEvent.MessageEvent;
+import messageEvent.MessageEvent;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

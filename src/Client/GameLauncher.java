@@ -1,12 +1,12 @@
-package Client;
+package client;
 
-import Client.ScreenControllers.ScreenController;
-import Events.GameEndEvent;
-import GameManager.GameManager;
-import Events.EventHandler;
-import Events.FrameEvent.FrameEvent;
-import Global.Settings;
-import MessageEvent.*;
+import client.screenControllers.ScreenController;
+import events.GameEndEvent;
+import gameManager.GameManager;
+import events.EventHandler;
+import events.frameEvent.FrameEvent;
+import global.Settings;
+import messageEvent.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

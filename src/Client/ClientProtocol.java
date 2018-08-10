@@ -1,13 +1,14 @@
-package Client;
+package client;
 
-import Events.FrameEvent.ClientFrameEvent;
-import Events.FrameEvent.ServerFrameEvent;
-import MessageEvent.MessageEvent;
-import Events.FrameEvent.FrameEvent;
-import GameManager.GameManager;
-import Objects.Entities.Player;
-import Objects.Entities.Projectiles.Projectile;
-import Physics.Physics;
+import animation.Animation;
+import events.frameEvent.ClientFrameEvent;
+import events.frameEvent.ServerFrameEvent;
+import messageEvent.MessageEvent;
+import events.frameEvent.FrameEvent;
+import gameManager.GameManager;
+import objects.entities.Player;
+import objects.entities.projectiles.Projectile;
+import physics.Physics;
 import org.json.JSONObject;
 
 /**
@@ -93,6 +94,16 @@ public class ClientProtocol{
                     Projectile existingP = game.getProjectile(p.getID());
                     if(existingP == null || !existingP.getID().equals(p.getID())) {
                         game.addProjectile(p);
+                    }
+                }
+            }
+
+            // Add all new animations
+            if(clientFrame.getNewAnimations() != null) {
+                for (Animation a : clientFrame.getNewAnimations()) {
+                    Player owner = game.getPlayer(a.getOwnerID());
+                    if(owner != null && !owner.getID().equals(game.getPlayerID())) {
+                        owner.addAnimation(a, true);
                     }
                 }
             }

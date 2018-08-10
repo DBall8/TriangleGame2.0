@@ -1,12 +1,12 @@
-package Server;
+package server;
 
-import Events.EventHandler;
-import Events.FrameEvent.FrameEvent;
-import Events.GameEndEvent;
-import GameManager.GameManager;
-import Global.Settings;
-import MessageEvent.MessageEvent;
-import MessageEvent.MessageHandler;
+import events.EventHandler;
+import events.frameEvent.FrameEvent;
+import events.GameEndEvent;
+import gameManager.GameManager;
+import global.Settings;
+import messageEvent.MessageEvent;
+import messageEvent.MessageHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

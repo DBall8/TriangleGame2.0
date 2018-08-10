@@ -1,12 +1,10 @@
-package Server;
+package server;
 
-import MessageEvent.MessageHandler;
+import messageEvent.MessageHandler;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 

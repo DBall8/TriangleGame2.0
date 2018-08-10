@@ -1,6 +1,5 @@
-package Server;
+package server;
 
-import Client.GameLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,8 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 public class LaunchScreenController {
 

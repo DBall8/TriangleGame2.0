@@ -1,7 +1,7 @@
-package Client;
+package client;
 
-import MessageEvent.MessageEvent;
-import MessageEvent.MessageHandler;
+import messageEvent.MessageEvent;
+import messageEvent.MessageHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;

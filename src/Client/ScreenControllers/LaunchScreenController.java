@@ -1,6 +1,6 @@
-package Client.ScreenControllers;
+package client.screenControllers;
 
-import Client.GameLauncher;
+import client.GameLauncher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

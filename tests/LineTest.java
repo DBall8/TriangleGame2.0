@@ -1,5 +1,4 @@
-import Objects.ICollidable;
-import Physics.Line;
+import physics.Line;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

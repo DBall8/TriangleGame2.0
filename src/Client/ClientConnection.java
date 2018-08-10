@@ -37,6 +37,7 @@ public class ClientConnection {
         try {
 
             socket = new Socket(url, port);
+            Launcher.connection = this;
 
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -50,8 +51,7 @@ public class ClientConnection {
             System.err.println("Could not establish connection.");
             throw e;
         }
-
-
+        ;
     }
 
     /**
@@ -98,16 +98,10 @@ public class ClientConnection {
      * Closes up the connection
      */
     public void close(){
-        // If still listening, stop listening
-        if(listenerThread != null){
-            listenerThread.interrupt();
-        }
-
         // Close the connection
         try {
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
         System.out.println("Connection closed.");

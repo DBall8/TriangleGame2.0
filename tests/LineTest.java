@@ -1,3 +1,4 @@
+import physics.Bounds;
 import physics.Line;
 import org.junit.Test;
 
@@ -48,6 +49,15 @@ public class LineTest {
         assertEquals(false, l1.intersects(l2));
         assertEquals(false, l2.intersects(l1));
 
+    }
+
+    @Test
+    public void boundsTest(){
+        Bounds b1 = new Bounds(10, 10, 10, 10);
+        Bounds b2 = new Bounds(10, 10, 20, 20);
+
+        assertEquals(b1.intersects(b2), true);
+        assertEquals(b2.intersects(b1), true);
     }
 
 }

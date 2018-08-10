@@ -12,6 +12,8 @@ import java.io.IOException;
  */
 public class Launcher extends Application {
 
+    public static ClientConnection connection;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -35,6 +37,9 @@ public class Launcher extends Application {
 
     @Override
     public void stop(){
+        if(connection != null){
+            connection.close();
+        }
         System.exit(0);
     }
 }
